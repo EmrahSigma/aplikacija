@@ -1,0 +1,60 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background: #f5f5f5;
+  }
+  
+  #piercing-list {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  
+  .piercing-card {
+    background: white;
+    padding: 1rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    width: 150px;
+  }
+  
+  .piercing-card img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+  }
+  
+  #camera-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+  }
+  
+  #camera-container.hidden {
+    display: none;
+  }
+  
+  video {
+    width: 300px;
+    height: 400px;
+    border-radius: 12px;
+  }
+  
+  #piercing-overlay {
+    position: absolute;
+    width: 60px;
+    top: 150px;
+    left: 120px;
+  }
+  
+  #close-btn {
+    margin-top: 1rem;
+    padding: 8px 16px;
+    border: none;
+    background: red;
+    color: white;
+    border-radius: 8px;
+  }
+  
