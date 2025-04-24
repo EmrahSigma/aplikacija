@@ -91,7 +91,7 @@
 
   <header>
     <div class="title">Piercing Store</div>
-    <div class="auth-buttons" id="authButtons" style="display: none;">
+    <div class="auth-buttons" id="authButtons" style="display: block;">
       <button onclick="signIn()">Sign In</button>
       <button onclick="signUp()">Sign Up</button>
     </div>
@@ -103,18 +103,20 @@
 
   <script>
     // Simulate login status (change to false to hide buttons)
-    const userIsSignedIn = true;
+    const userIsSignedIn = false;
 
     if (userIsSignedIn) {
-      document.getElementById('authButtons').style.display = 'block';
+      document.getElementById('authButtons').style.display = 'none';
     }
 
     function signIn() {
-      alert('Redirect to sign-in page');
+      // Redirect to the Sign In page
+      window.location.href = "signin.html";
     }
 
     function signUp() {
-      alert('Redirect to sign-up page');
+      // Redirect to the Sign Up page
+      window.location.href = "signup.html";
     }
 
     fetch('http://localhost:3000/piercings')
