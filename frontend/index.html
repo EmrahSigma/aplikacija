@@ -85,6 +85,51 @@
     .btn:hover {
       background-color: #1d4ed8;
     }
+
+    .welcome-message {
+      font-size: 1.2rem;
+      margin-right: 5rem; /* Move it more to the right */
+      display: inline-block;
+    }
+
+    .sign-out-btn {
+      background-color: #f44336; /* Red color for sign out */
+      border: none;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      margin-left: 1rem;
+      display: inline-block;
+    }
+
+    .sign-out-btn:hover {
+      background-color: #e53935;
+    }
+
+    /* Navbar styles */
+    nav {
+      background-color: #111827;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    nav a {
+      color: white;
+      margin: 0 1rem;
+      text-decoration: none;
+      font-size: 1.2rem;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    .content-section {
+      padding: 2rem;
+      text-align: center;
+    }
   </style>
 </head>
 <body>
@@ -95,18 +140,35 @@
       <button onclick="signIn()">Sign In</button>
       <button onclick="signUp()">Sign Up</button>
     </div>
+    <div id="welcomeMessage" class="welcome-message" style="display: none;"></div>
+    <button id="signOutButton" class="sign-out-btn" style="display: none;" onclick="signOut()">Sign Out</button>
   </header>
+
+  <!-- Navbar -->
+  <nav>
+    <a href="index.html" id="piercingsLink">Piercings</a>
+    <a href="#" id="onasLink" onclick="showOnas()">O Nas</a>
+  </nav>
 
   <section class="piercing-container" id="piercing-list">
     <!-- Piercings will go here dynamically -->
   </section>
 
-  <script>
-    // Simulate login status (change to false to hide buttons)
-    const userIsSignedIn = false;
+  <section id="onas" class="content-section" style="display: none;">
+    <h2>O Nas</h2>
+    <p>Welcome to our Piercing Store! We offer a variety of high-quality piercings, jewelry, and accessories. Our goal is to provide the best products and services to all of our customers. Thank you for visiting us!</p>
+  </section>
 
-    if (userIsSignedIn) {
+  <script>
+    // Check if the user is signed in (check localStorage for user)
+    const user = JSON.parse(localStorage.getItem('user'));
+
+    if (user) {
+      // If user is signed in, hide sign up/sign in buttons, show welcome message, and show sign out button
       document.getElementById('authButtons').style.display = 'none';
+      document.getElementById('welcomeMessage').style.display = 'block';
+      document.getElementById('welcomeMessage').innerText = `Welcome ${user.ime} ${user.priimek}!`;
+      document.getElementById('signOutButton').style.display = 'inline-block';
     }
 
     function signIn() {
@@ -119,6 +181,19 @@
       window.location.href = "signup.html";
     }
 
+    function signOut() {
+      // Remove the user data from localStorage and redirect to index
+      localStorage.removeItem('user');
+      window.location.reload(); // Refresh the page to show sign in and sign up buttons
+    }
+
+    function showOnas() {
+      // Hide piercing list and show O Nas content
+      document.getElementById('piercing-list').style.display = 'none';
+      document.getElementById('onas').style.display = 'block';
+    }
+
+    // Fetch piercings and display them
     fetch('http://localhost:3000/piercings')
       .then(res => res.json())
       .then(data => {
@@ -130,7 +205,7 @@
             <img src="${piercing.image_url || 'https://via.placeholder.com/150'}" alt="${piercing.name}">
             <h3>${piercing.name}</h3>
             <p>${piercing.price} €</p>
-            <button class="btn">Try</button>
+            <button class="btn" onclick="tryOn(${piercing.id})">Try</button>
           `;
           container.appendChild(div);
         });
@@ -138,6 +213,16 @@
       .catch(err => {
         console.error('Failed to load piercings', err);
       });
+
+    // Redirect to sign-up if user is not signed in when they try to "try" a piercing
+    function tryOn(piercingId) {
+      if (!user) {
+        window.location.href = "signup.html";  // Redirect to sign up page if not signed in
+      } else {
+        // Handle the "try" action (e.g., show more details or perform the action for signed-in users)
+        alert(`Trying on piercing with ID: ${piercingId}`);
+      }
+    }
   </script>
 
 </body>

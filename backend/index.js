@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const mysql = require('mysql2');
+const path = require('path');
 
 const app = express();
 app.use(cors());
@@ -13,12 +14,16 @@ const db = mysql.createConnection({
   database: 'piercing_store',
 });
 
+app.use(express.static(path.join(__dirname, '../frontend')));
 
 app.get('/piercings', (req, res) => {
   db.query('SELECT * FROM piercings', (err, result) => {
     if (err) return res.status(500).send(err);
     res.json(result);
   });
+});
+app.get('/', (req, res) => {
+  res.send('Piercing Store API is running');
 });
 
 app.listen(3000, () => console.log('Backend running on http://localhost:3000'));
