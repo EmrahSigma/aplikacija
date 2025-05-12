@@ -3,11 +3,20 @@
 <head>
   <meta charset="UTF-8" />
   <title>Sign Up</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       font-family: Arial, sans-serif;
       background: #f7f8fa;
       margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
     }
 
     header {
@@ -17,6 +26,7 @@
       text-align: center;
       font-size: 2rem;
       font-weight: bold;
+      width: 100%;
     }
 
     nav {
@@ -24,6 +34,7 @@
       color: white;
       padding: 1rem;
       text-align: center;
+      width: 100%;
     }
 
     nav a {
@@ -42,7 +53,8 @@
       padding: 2rem;
       border-radius: 1rem;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      width: 300px;
+      width: 100%;
+      max-width: 400px;
       margin: 3rem auto;
     }
 
@@ -53,20 +65,23 @@
 
     input {
       width: 100%;
-      padding: 0.5rem;
+      padding: 0.75rem;
       margin: 0.5rem 0;
       border-radius: 0.5rem;
       border: 1px solid #ccc;
+      font-size: 1rem;
     }
 
     button {
       width: 100%;
-      padding: 0.5rem;
+      padding: 0.75rem;
       background-color: #2563eb;
       color: white;
       border: none;
       border-radius: 0.5rem;
       cursor: pointer;
+      font-size: 1rem;
+      margin-top: 0.5rem;
     }
 
     button:hover {
@@ -76,11 +91,13 @@
     .message {
       margin-top: 1rem;
       text-align: center;
+      font-weight: bold;
     }
 
     .link-message {
       text-align: center;
       margin-top: 1rem;
+      font-size: 0.95rem;
     }
 
     .link-message a {
@@ -91,6 +108,22 @@
 
     .link-message a:hover {
       text-decoration: underline;
+    }
+
+    @media (max-width: 500px) {
+      header {
+        font-size: 1.5rem;
+      }
+
+      nav a {
+        font-size: 1rem;
+        margin: 0 0.5rem;
+      }
+
+      .form-container {
+        padding: 1.5rem;
+        margin: 2rem 1rem;
+      }
     }
   </style>
 </head>

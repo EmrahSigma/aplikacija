@@ -30,10 +30,11 @@
     .auth-buttons {
       position: absolute;
       right: 2rem;
+      display: flex;
+      gap: 0.5rem;
     }
 
     .auth-buttons button {
-      margin-left: 1rem;
       padding: 0.5rem 1rem;
       border: none;
       background-color: #2563eb;
@@ -45,6 +46,66 @@
 
     .auth-buttons button:hover {
       background-color: #1d4ed8;
+    }
+
+    .menu-button {
+      display: none;
+      position: absolute;
+      right: 1rem;
+      top: 1.5rem;
+      background-color: #2563eb;
+      color: white;
+      font-size: 1.5rem;
+      padding: 0.4rem 0.8rem;
+      border: none;
+      border-radius: 0.5rem;
+      cursor: pointer;
+    }
+
+    .dropdown {
+      display: none;
+      position: absolute;
+      top: 4.5rem;
+      right: 1rem;
+      background-color: #1e293b;
+      border-radius: 0.5rem;
+      padding: 1rem;
+      flex-direction: column;
+      gap: 0.5rem;
+      z-index: 10;
+      opacity: 0;
+      transform: translateY(-10px);
+      transition: all 0.3s ease;
+    }
+
+    .dropdown.show {
+      display: flex;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .dropdown button {
+      background-color: #2563eb;
+      color: white;
+      border: none;
+      padding: 0.5rem;
+      border-radius: 0.4rem;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .dropdown button:hover {
+      background-color: #1d4ed8;
+    }
+
+    @media (max-width: 768px) {
+      .auth-buttons {
+        display: none;
+      }
+
+      .menu-button {
+        display: block;
+      }
     }
 
     .piercing-container {
@@ -62,6 +123,7 @@
       padding: 1rem;
       width: 200px;
       text-align: center;
+      animation: fadeIn 0.5s ease;
     }
 
     .piercing img {
@@ -86,28 +148,6 @@
       background-color: #1d4ed8;
     }
 
-    .welcome-message {
-      font-size: 1.2rem;
-      margin-right: 5rem; /* Move it more to the right */
-      display: inline-block;
-    }
-
-    .sign-out-btn {
-      background-color: #f44336; /* Red color for sign out */
-      border: none;
-      color: white;
-      padding: 0.5rem 1rem;
-      border-radius: 0.5rem;
-      cursor: pointer;
-      margin-left: 1rem;
-      display: inline-block;
-    }
-
-    .sign-out-btn:hover {
-      background-color: #e53935;
-    }
-
-    /* Navbar styles */
     nav {
       background-color: #111827;
       color: white;
@@ -130,24 +170,36 @@
       padding: 2rem;
       text-align: center;
     }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
   </style>
 </head>
 <body>
 
   <header>
     <div class="title">Piercing Store</div>
-    <div class="auth-buttons" id="authButtons" style="display: block;">
+
+    <div class="auth-buttons" id="authButtons">
       <button onclick="signIn()">Sign In</button>
       <button onclick="signUp()">Sign Up</button>
+      <button id="signOutButton" onclick="signOut()" style="display: none;">Sign Out</button>
     </div>
-    <div id="welcomeMessage" class="welcome-message" style="display: none;"></div>
-    <button id="signOutButton" class="sign-out-btn" style="display: none;" onclick="signOut()">Sign Out</button>
+
+    <button class="menu-button" onclick="toggleDropdown()">☰</button>
+
+    <div class="dropdown" id="dropdownMenu">
+      <button onclick="handleDropdownClick(signIn)">Sign In</button>
+      <button onclick="handleDropdownClick(signUp)">Sign Up</button>
+      <button id="dropdownSignOut" onclick="handleDropdownClick(signOut)" style="display: none;">Sign Out</button>
+    </div>
   </header>
 
-  <!-- Navbar -->
   <nav>
-    <a href="index.html" id="piercingsLink">Piercings</a>
-    <a href="#" id="onasLink" onclick="showOnas()">O Nas</a>
+    <a href="index.html">Piercings</a>
+    <a href="#" onclick="showOnas()">O Nas</a>
   </nav>
 
   <section class="piercing-container" id="piercing-list">
@@ -160,40 +212,46 @@
   </section>
 
   <script>
-    // Check if the user is signed in (check localStorage for user)
     const user = JSON.parse(localStorage.getItem('user'));
+    const authButtons = document.getElementById('authButtons');
+    const signOutButton = document.getElementById('signOutButton');
+    const dropdownMenu = document.getElementById('dropdownMenu');
+    const dropdownSignOut = document.getElementById('dropdownSignOut');
 
     if (user) {
-      // If user is signed in, hide sign up/sign in buttons, show welcome message, and show sign out button
-      document.getElementById('authButtons').style.display = 'none';
-      document.getElementById('welcomeMessage').style.display = 'block';
-      document.getElementById('welcomeMessage').innerText = `Welcome ${user.ime} ${user.priimek}!`;
-      document.getElementById('signOutButton').style.display = 'inline-block';
+      authButtons.querySelectorAll('button').forEach(btn => btn.style.display = 'none');
+      signOutButton.style.display = 'inline-block';
+      dropdownMenu.querySelectorAll('button').forEach(btn => btn.style.display = 'none');
+      dropdownSignOut.style.display = 'inline-block';
+    }
+
+    function toggleDropdown() {
+      dropdownMenu.classList.toggle('show');
+    }
+
+    function handleDropdownClick(callback) {
+      callback();
+      dropdownMenu.classList.remove('show'); // Close menu after action
     }
 
     function signIn() {
-      // Redirect to the Sign In page
       window.location.href = "signin.html";
     }
 
     function signUp() {
-      // Redirect to the Sign Up page
       window.location.href = "signup.html";
     }
 
     function signOut() {
-      // Remove the user data from localStorage and redirect to index
       localStorage.removeItem('user');
-      window.location.reload(); // Refresh the page to show sign in and sign up buttons
+      window.location.reload();
     }
 
     function showOnas() {
-      // Hide piercing list and show O Nas content
       document.getElementById('piercing-list').style.display = 'none';
       document.getElementById('onas').style.display = 'block';
     }
 
-    // Fetch piercings and display them
     fetch('http://localhost:3000/piercings')
       .then(res => res.json())
       .then(data => {
@@ -214,12 +272,10 @@
         console.error('Failed to load piercings', err);
       });
 
-    // Redirect to sign-up if user is not signed in when they try to "try" a piercing
     function tryOn(piercingId) {
       if (!user) {
-        window.location.href = "signup.html";  // Redirect to sign up page if not signed in
+        window.location.href = "signup.html";
       } else {
-        // Handle the "try" action (e.g., show more details or perform the action for signed-in users)
         alert(`Trying on piercing with ID: ${piercingId}`);
       }
     }
