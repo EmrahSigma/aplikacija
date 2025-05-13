@@ -5,7 +5,7 @@ const overlay = document.getElementById('piercing-overlay');
 const closeBtn = document.getElementById('close-btn');
 
 // Fetch piercings from backend
-fetch('http://localhost:3000/piercings')
+fetch('http://10.0.2.2:3000/piercings')
   .then(res => res.json())
   .then(data => {
     data.forEach(p => {
